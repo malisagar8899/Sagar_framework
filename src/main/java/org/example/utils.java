@@ -14,18 +14,20 @@ import java.util.concurrent.TimeUnit;
 
 public class utils {
     public static String readKey(String key) {
-        Properties p = null;
+        Properties p = new Properties();
         try {
-            FileInputStream fileInputStream = new FileInputStream(System.getProperty("user.dir") + "Resource/properties");
-            p = new Properties();
+            FileInputStream fileInputStream = new FileInputStream("Resource/properties");
             p.load(fileInputStream);
         } catch (FileNotFoundException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Properties file not found: " + e.getMessage());
+            return null;
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.out.println("Error loading properties file: " + e.getMessage());
+            return null;
         }
         return p.getProperty(key);
     }
+
     public static void waitImplicitWait(WebDriver driver, int time){
         driver.manage().timeouts().implicitlyWait(time, TimeUnit.SECONDS);
     }

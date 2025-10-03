@@ -5,37 +5,32 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
 public class DriverManager {
-    public static WebDriver driver;
-
-    public static WebDriver getDriver() {
-
-        return driver;
-    }
-
-    public static void setDriver(WebDriver driver) {
-
-        DriverManager.driver = driver;
-    }
+    private static WebDriver driver;
 
     public static void init() {
         String browser = utils.readKey("browser");
-        browser = browser.toLowerCase();
 
         switch (browser) {
             case "chrome":
-                ChromeOptions chromeOptions = new ChromeOptions();
-                chromeOptions.addArguments("--start-maximized");
-                driver = new ChromeDriver(chromeOptions);
+                ChromeOptions options = new ChromeOptions();
+                options.addArguments("--start-maximized");
+                driver = new ChromeDriver(options);
                 break;
-
+            // Add other browsers if needed
         }
-        if (getDriver() != null) {
+    }
+
+    public static WebDriver getDriver() {
+        if (driver == null) {
+            throw new IllegalStateException("WebDriver not initialized. Call DriverManager.init() first.");
+        }
+        return driver;
+    }
+
+    public static void down() {
+        if (driver != null) {
             driver.quit();
             driver = null;
         }
-
     }
-
-
-
 }
